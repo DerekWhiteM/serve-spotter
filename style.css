@@ -17,12 +17,11 @@ body {
 .menu__title {
     font-size: 1.8rem;
     margin: auto;
-    margin-bottom: 1rem;
     text-align: center;
 }
 
-.menu__start {
-    margin-top: 1rem;
+.menu__btn {
+    margin-top: .236rem;
     width: 100%;
 }
 
@@ -30,6 +29,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: .236rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .config__item {
