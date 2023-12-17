@@ -7,11 +7,13 @@ body {
     display: flex;
     margin: 0;
     height: 100%;
+    color: white;
 }
 
 .sidebar {
-    background-color: white;
+    background-color: #1b1b1b;
     max-width: 16rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .sidebar__title {
@@ -24,12 +26,17 @@ body {
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 }
 
-.menu__section {
-    padding-left: 1rem;
-    padding-right: 1rem;
+.menu-section__title {
+    text-align: center;
+    background-color: #292929;
+    padding-top: .236rem;
+    padding-bottom: .236rem;
+}
+
+.menu-section__content {
+    padding: 1.5rem 1rem 1.5rem 1rem;
 }
 
 .menu__btn {
@@ -41,6 +48,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: .236rem;
+    margin-bottom: 1rem;
 }
 
 .config__item {
@@ -108,14 +116,6 @@ body {
 
 .scoreboard {
     margin-top: 1rem;
-}
-
-.menu__title {
-    text-align: center;
-    background-color: lightgray;
-    padding-top: .236rem;
-    padding-bottom: .236rem;
-    font-weight: bold;
 }
 
 #scoreboard {
