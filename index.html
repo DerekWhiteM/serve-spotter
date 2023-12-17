@@ -7,45 +7,83 @@
         <title>Document</title>
         <link rel="icon" href="data:;base64,=" />
         <script src="game.js"></script>
+        <script src="scoreboard.js"></script>
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="reset.css" />
     </head>
     <body>
         <script>
-            const game = new Game();
+            const scoreboard = new Scoreboard("scoreboard");
+            const game = new Game("ball", scoreboard);
         </script>
-        <div class="menu">
-            <h1 class="menu__title">Serve Spotter</h1>
-            <ul class="config">
-                <li class="config__item">
-                    <label for="speed">Speed (1-10)</label>
-                    <input name="speed" type="number" size="11" value="1" min="1" max="10" />
-                </li>
-                <li class="config__item">
-                    <label for="frequency">Frequency (ms)</label>
-                    <input name="frequency" type="number" size="11" value="1000" min="100" />
-                </li>
-                <li class="config__item">
-                    <label for="rounds">Rounds (1-10)</label>
-                    <input name="rounds" type="number" size="11" value="1" min="1" max="10" />
-                </li>
-            </ul>
-            <button
-                class="menu__btn"
-                onclick="
-                    const speed = Number(document.getElementsByName('speed')[0].value);
-                    const frequency = Number(document.getElementsByName('frequency')[0].value);
-                    const rounds = Number(document.getElementsByName('rounds')[0].value);
-                    game.setSpeed(speed);
-                    game.setFrequency(frequency);
-                    game.setRounds(rounds);
-                    setTimeout(() => game.serve(), frequency);
-                "
-            >
-                Start
-            </button>
-            <button class="menu__btn">Reset</button>
+        <div class="sidebar">
+            <h1 class="sidebar__title">Serve Spotter</h1>
+            <div class="menu">
+                <h2 class="menu__title">Configuration</h2>
+                <div class="menu__section">
+                    <ul class="config">
+                        <li class="config__item">
+                            <label for="speed">Speed (1-10)</label>
+                            <input
+                                name="speed"
+                                type="number"
+                                size="11"
+                                value="1"
+                                min="1"
+                                max="10"
+                            />
+                        </li>
+                        <li class="config__item">
+                            <label for="frequency">Frequency (ms)</label>
+                            <input
+                                name="frequency"
+                                type="number"
+                                size="11"
+                                value="1000"
+                                min="100"
+                            />
+                        </li>
+                        <li class="config__item">
+                            <label for="rounds">Rounds (1-10)</label>
+                            <input
+                                name="rounds"
+                                type="number"
+                                size="11"
+                                value="1"
+                                min="1"
+                                max="10"
+                            />
+                        </li>
+                    </ul>
+                    <button
+                        class="menu__btn"
+                        onclick="
+                        const speed = Number(document.getElementsByName('speed')[0].value);
+                        const frequency = Number(document.getElementsByName('frequency')[0].value);
+                        const rounds = Number(document.getElementsByName('rounds')[0].value);
+                        game.setSpeed(speed);
+                        game.setFrequency(frequency);
+                        game.setRounds(rounds);
+                        setTimeout(() => game.serve(), frequency);
+                    "
+                    >
+                        Start
+                    </button>
+                    <button class="menu__btn">Reset</button>
+                </div>
+                <h2 class="menu__title">Scoreboard</h2>
+                <div class="menu__section">
+                    <table id="scoreboard">
+                        <thead>
+                            <th>#</th>
+                            <th>ms</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
         <div class="court">
             <div id="ball"></div>
             <div class="court-dividers">
