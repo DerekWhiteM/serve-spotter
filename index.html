@@ -13,12 +13,16 @@
     </head>
     <body>
         <script>
-            const scoreboard = new Scoreboard("scoreboard");
+            const scoreboard = new Scoreboard("scoreboard", "avg");
             const game = new Game("ball", scoreboard);
         </script>
         <div class="sidebar">
             <h1 class="sidebar__title">Serve Spotter</h1>
             <div class="menu">
+                <h2 class="menu__title">Guide</h2>
+                <div class="menu__section">
+                    Click on the left or right side of the court to return a serve as quicly as possible.
+                </div>
                 <h2 class="menu__title">Configuration</h2>
                 <div class="menu__section">
                     <ul class="config">
@@ -41,6 +45,7 @@
                                 size="11"
                                 value="1000"
                                 min="100"
+                                max="10000"
                             />
                         </li>
                         <li class="config__item">
@@ -49,7 +54,7 @@
                                 name="rounds"
                                 type="number"
                                 size="11"
-                                value="1"
+                                value="3"
                                 min="1"
                                 max="10"
                             />
@@ -64,22 +69,24 @@
                         game.setSpeed(speed);
                         game.setFrequency(frequency);
                         game.setRounds(rounds);
+                        game.start();
                         setTimeout(() => game.serve(), frequency);
                     "
                     >
                         Start
                     </button>
-                    <button class="menu__btn">Reset</button>
+                    <button class="menu__btn" onclick="game.reset()">Reset</button>
                 </div>
                 <h2 class="menu__title">Scoreboard</h2>
                 <div class="menu__section">
                     <table id="scoreboard">
                         <thead>
-                            <th>#</th>
-                            <th>ms</th>
+                            <th>Round</th>
+                            <th>Score</th>
                         </thead>
                         <tbody></tbody>
                     </table>
+                    <div id="avg"></div>
                 </div>
             </div>
         </div>

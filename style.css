@@ -11,6 +11,7 @@ body {
 
 .sidebar {
     background-color: white;
+    max-width: 16rem;
 }
 
 .sidebar__title {
@@ -120,4 +121,11 @@ body {
 #scoreboard {
     width: 100%;
     text-align: center;
+}
+
+#avg {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
 }

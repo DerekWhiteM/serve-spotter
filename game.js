@@ -11,6 +11,7 @@ class Game {
     #end = null;
     #ballId;
     #scoreboard;
+    #isRunning = false;
 
     constructor(ballId, scoreboard) {
         this.#ballId = ballId;
@@ -19,6 +20,33 @@ class Game {
 
     getFrequency() {
         return this.#frequency;
+    }
+
+    reset() {
+        this.#round = 1;
+        this.#start = null;
+        this.#end = null;
+        this.#isRunning = false;
+        this.#scoreboard.reset();
+    }
+
+    return(direction) {
+        let ms;
+        if (!this.#isRunning || this.#end !== null) {
+            return null;
+        } else if (direction === this.#serveDirection) {
+            this.#end = Date.now();
+            ms = this.#end - this.#start;
+        } else {
+            this.#end = Date.now();
+            ms = 5000;
+        }
+        this.#scoreboard.addScore(ms);
+        if (this.#round > this.#rounds) {
+            this.#isRunning = false;
+            this.#scoreboard.postAverageScore();
+        }
+        return ms;
     }
 
     setFrequency(frequency) {
@@ -55,8 +83,7 @@ class Game {
                 elem.style.left = left + "px";
             }
         };
-        if (this.#round > this.#rounds) {
-            console.log("Cannot serve: game is over");
+        if (!this.#isRunning || this.#round > this.#rounds) {
             return;
         }
         const randomZeroOrOne = Math.round(Math.random());
@@ -76,20 +103,8 @@ class Game {
         this.#round++;
     }
 
-    return(direction) {
-        let ms;
-        if (this.#end !== null) {
-            console.log("Serve is already returned");
-            return null;
-        } else if (direction === this.#serveDirection) {
-            this.#end = Date.now();
-            ms = this.#end - this.#start;
-            console.log("Hit: " + ms + " ms");
-        } else {
-            ms = 1000;
-            console.log("Miss: " + ms + " ms");
-        }
-        this.#scoreboard.addScore(ms);
-        return ms;
+    start() {
+        this.reset();
+        this.#isRunning = true;
     }
 }
