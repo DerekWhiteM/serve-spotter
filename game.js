@@ -16,6 +16,13 @@ class Game {
     constructor(ballId, scoreboard) {
         this.#ballId = ballId;
         this.#scoreboard = scoreboard;
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowLeft") {
+                this.return("ad");
+            } else if (event.key === "ArrowRight") {
+                this.return("deuce");
+            }
+        });
     }
 
     getFrequency() {
@@ -46,6 +53,7 @@ class Game {
             this.#isRunning = false;
             this.#scoreboard.postAverageScore();
         }
+        setTimeout(() => this.serve(), this.getFrequency());
         return ms;
     }
 
@@ -72,9 +80,6 @@ class Game {
                 elem.style.top = initTop;
                 elem.style.left = initLeft;
                 this.return();
-                if (this.#round <= this.#rounds) {
-                    setTimeout(() => this.serve(), this.getFrequency());
-                }
             } else {
                 pos += this.#speed;
                 top += 4 * this.#speed;
