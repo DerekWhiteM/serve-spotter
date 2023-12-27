@@ -1,19 +1,21 @@
-class Game {
+import { Scoreboard } from "./scoreboard";
+
+export class Game {
     static MAX_SPEED = 10;
     static MIN_SPEED = 1;
 
     #frequency = 1;
     #rounds = 1;
     #round = 1;
-    #serveDirection;
+    #serveDirection: string | undefined;
     #speed = 1;
-    #start = null;
-    #end = null;
-    #ballId;
+    #start: number | null = null;
+    #end: number | null = null;
+    #ballId: string;
     #scoreboard;
     #isRunning = false;
 
-    constructor(ballId, scoreboard) {
+    constructor(ballId: string, scoreboard: Scoreboard) {
         this.#ballId = ballId;
         this.#scoreboard = scoreboard;
         document.addEventListener("keydown", event => {
@@ -37,13 +39,13 @@ class Game {
         this.#scoreboard.reset();
     }
 
-    return(direction) {
+    return(direction: string | null) {
         let ms;
         if (!this.#isRunning || this.#end !== null) {
             return null;
         } else if (direction === this.#serveDirection) {
             this.#end = Date.now();
-            ms = this.#end - this.#start;
+            ms = this.#end - (this.#start || 0);
         } else {
             this.#end = Date.now();
             ms = 5000;
@@ -57,35 +59,41 @@ class Game {
         return ms;
     }
 
-    setFrequency(frequency) {
+    setFrequency(frequency: number) {
         this.#frequency = frequency;
     }
 
-    setSpeed(speed) {
+    setSpeed(speed: number) {
         this.#speed = speed;
     }
 
-    setRounds(rounds) {
+    setRounds(rounds: number) {
         this.#rounds = rounds;
     }
 
     serve() {
         const frame = () => {
             if (this.#end) {
-                clearInterval(id);
-                elem.style.top = initTop;
-                elem.style.left = initLeft;
+                clearInterval(String(id));
+                if (elem) {
+                    elem.style.top = initTop;
+                    elem.style.left = initLeft;
+                }
             } else if (pos >= 210) {
-                clearInterval(id);
-                elem.style.top = initTop;
-                elem.style.left = initLeft;
-                this.return();
+                clearInterval(String(id));
+                if (elem) {
+                    elem.style.top = initTop;
+                    elem.style.left = initLeft;
+                }
+                this.return(null);
             } else {
                 pos += this.#speed;
                 top += 4 * this.#speed;
                 direction === "deuce" ? (left += this.#speed) : (left -= this.#speed);
-                elem.style.top = top + "px";
-                elem.style.left = left + "px";
+                if (elem) {
+                    elem.style.top = top + "px";
+                    elem.style.left = left + "px";
+                }
             }
         };
         if (!this.#isRunning || this.#round > this.#rounds) {
@@ -94,14 +102,15 @@ class Game {
         const randomZeroOrOne = Math.round(Math.random());
         const direction = randomZeroOrOne === 0 ? "deuce" : "ad";
         this.#serveDirection = direction;
-        let id = null;
+        let id: NodeJS.Timeout | null = null;
         const elem = document.getElementById(this.#ballId);
+        if (!elem) return;
         const initTop = elem.style.top;
         const initLeft = elem.style.left;
         let pos = 0;
         let top = 0;
         let left = 202;
-        clearInterval(id);
+        if (id) clearInterval(id);
         this.#start = Date.now();
         this.#end = null;
         id = setInterval(frame, 10);
