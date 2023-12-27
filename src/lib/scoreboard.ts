@@ -2,10 +2,13 @@ export class Scoreboard {
     #scores: number[] = [];
     #tableId;
     #avgId;
+    #bestScoreId;
+    #bestScore: number | null = null;
 
-    constructor(tableId: string, avgId: string) {
+    constructor(tableId: string, avgId: string, bestScoreId: string) {
         this.#tableId = tableId;
         this.#avgId = avgId;
+        this.#bestScoreId = bestScoreId;
     }
 
     postAverageScore() {
@@ -14,7 +17,17 @@ export class Scoreboard {
         const avg = sum / this.#scores.length;
         const elem = document.getElementById(this.#avgId);
         if (!elem) return;
-        elem.innerHTML = "Average: " + Math.round(avg);
+        const score = Math.round(avg);
+        elem.innerHTML = "Score: " + score;
+        this.postNewBestScore(score);
+    }
+
+    private postNewBestScore(score: number) {
+        if (this.#bestScore !== null && this.#bestScore < score) return;
+        this.#bestScore = score;
+        const elem = document.getElementById(this.#bestScoreId);
+        if (!elem) return;
+        elem.innerHTML = "Best Score: " + score;
     }
 
     addScore(score: number) {

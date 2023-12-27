@@ -7,7 +7,7 @@ import { Label } from "./components/ui/label";
 import { Scoreboard } from "./lib/scoreboard";
 
 function App() {
-    const scoreboard = new Scoreboard("scoreboard", "avg");
+    const scoreboard = new Scoreboard("scoreboard", "avg", "bestScore");
     const game = new Game("ball", scoreboard);
     return (
         <>
@@ -112,6 +112,10 @@ function App() {
                             </table>
                             <div
                                 id="avg"
+                                className="w-full text-center font-bold mt-4"
+                            ></div>
+                            <div
+                                id="bestScore"
                                 className="w-full text-center font-bold mt-4"
                             ></div>
                         </div>
