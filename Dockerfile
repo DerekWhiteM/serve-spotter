@@ -9,6 +9,5 @@ COPY ./pb /pb
 WORKDIR /pb
 RUN go mod init pocketbase && go mod tidy
 RUN CGO_ENABLED=0 go build
-WORKDIR /
 EXPOSE 8080
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080"]
+CMD ["pocketbase", "serve", "--http=0.0.0.0:8080"]

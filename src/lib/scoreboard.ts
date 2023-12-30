@@ -16,10 +16,11 @@ export class Scoreboard {
         const sum = this.#scores.reduce((total, num) => total + num, 0);
         const avg = sum / this.#scores.length;
         const elem = document.getElementById(this.#avgId);
-        if (!elem) return;
+        if (!elem) return 0;
         const score = Math.round(avg);
         elem.innerHTML = "Score: " + score;
         this.postNewBestScore(score);
+        return score;
     }
 
     private postNewBestScore(score: number) {

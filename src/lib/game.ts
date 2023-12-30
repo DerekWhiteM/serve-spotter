@@ -1,3 +1,4 @@
+import { pb } from "./pocketbase";
 import { Scoreboard } from "./scoreboard";
 
 export class Game {
@@ -41,19 +42,21 @@ export class Game {
 
     return(direction: string | null) {
         let ms;
-        if (!this.#isRunning || this.#end !== null) {
+        if (!this.#isRunning || this.#end !== null) { // Game has been reset
             return null;
-        } else if (direction === this.#serveDirection) {
+        } else if (direction === this.#serveDirection) { // Successful return
             this.#end = Date.now();
             ms = this.#end - (this.#start || 0);
-        } else {
+        } else { // Missed return
             this.#end = Date.now();
             ms = 5000;
+            return this.reset();
         }
         this.#scoreboard.addScore(ms);
-        if (this.#round > this.#rounds) {
+        if (this.#round > this.#rounds) { // Game completed
             this.#isRunning = false;
-            this.#scoreboard.postAverageScore();
+            const score = this.#scoreboard.postAverageScore();
+            pb.collection("played_games").create({ score, user_id: pb.authStore.model?.id });
         }
         setTimeout(() => this.serve(), this.getFrequency());
         return ms;
@@ -79,7 +82,7 @@ export class Game {
                     elem.style.top = initTop;
                     elem.style.left = initLeft;
                 }
-            } else if (pos >= 210) {
+            } else if (pos >= 210) { // Ball has reached end of path
                 clearInterval(String(id));
                 if (elem) {
                     elem.style.top = initTop;
