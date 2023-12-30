@@ -1,11 +1,16 @@
+import { AppContext } from "@/app-context";
 import { Button } from "./button";
 import { Game } from "@/lib/game";
 import { getInputElementByName } from "@/lib/utils";
 import { Input } from "./input";
 import { Label } from "./label";
+import { LoginDialog } from "./login-dialog";
+import { pb } from "@/lib/pocketbase";
 import { Scoreboard } from "./scoreboard";
+import { useContext } from "react";
 
 export function Sidebar({ game }: { game: Game }) {
+    const { user, setUser } = useContext(AppContext);
     return (
         <div className="max-w-[16rem] h-full flex flex-col overflow-y-auto">
             <h1 className="text-[1.8rem] text-center mx-auto p-4">Serve Spotter</h1>
@@ -85,14 +90,20 @@ export function Sidebar({ game }: { game: Game }) {
                 </div>
             </div>
             <Scoreboard />
-            <div className="w-full p-4 text-center mt-auto">
-                <a
-                    href="javascript:void(0)"
-                    className="no-underline transition-colors hover:text-foreground text-muted-foreground mt-auto"
+            {user ? (
+                <Button
+                    className="w-full p-4 text-center mt-auto"
+                    variant="outline"
+                    onClick={() => {
+                        pb.authStore.clear();
+                        setUser?.(null);
+                    }}
                 >
-                    Log in
-                </a>
-            </div>
+                    Logout
+                </Button>
+            ) : (
+                <LoginDialog className="w-full p-4 text-center mt-auto" />
+            )}
         </div>
     );
 }
