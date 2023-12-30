@@ -1,13 +1,16 @@
 {
-  "name": "vite-demo",
+  "name": "serve-spotter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "build:pb": "cd pb && go build",
+    "build:react": "tsc && vite build",
+    "dev:pb": "cd pb && pocketbase serve",
+    "dev:react": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "npm run build && cd pb && pocketbase serve"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.0.2",
@@ -21,6 +24,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.0",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

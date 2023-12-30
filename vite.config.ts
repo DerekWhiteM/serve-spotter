@@ -9,5 +9,7 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    base: "/serve-spotter"
+    build: {
+        outDir: "./pb/pb_public"
+    }
 });
