@@ -56,7 +56,9 @@ export class Game {
         if (this.#round > this.#rounds) { // Game completed
             this.#isRunning = false;
             const score = this.#scoreboard.postAverageScore();
-            pb.collection("played_games").create({ score, user_id: pb.authStore.model?.id });
+            if (pb.authStore.model) {
+                pb.collection("played_games").create({ score, user_id: pb.authStore.model.id });
+            }
         }
         setTimeout(() => this.serve(), this.getFrequency());
         return ms;

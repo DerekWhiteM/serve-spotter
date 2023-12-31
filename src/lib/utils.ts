@@ -5,6 +5,6 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function getInputElementByName(name: string) {
-    return document.getElementsByName(name)[0] as HTMLInputElement;
+export function getInputElementById(id: string) {
+    return document.getElementById(id) as HTMLInputElement;
 }

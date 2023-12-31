@@ -1,7 +1,7 @@
 import { AppContext } from "@/app-context";
 import { Button } from "./button";
 import { Game } from "@/lib/game";
-import { getInputElementByName } from "@/lib/utils";
+import { getInputElementById } from "@/lib/utils";
 import { Input } from "./input";
 import { Label } from "./label";
 import { LoginDialog } from "./login-dialog";
@@ -31,7 +31,7 @@ export function Sidebar({ game }: { game: Game }) {
                         <li className="flex justify-between items-center gap-[0.236rem]">
                             <Label htmlFor="speed">Speed (1-10)</Label>
                             <Input
-                                name="speed"
+                                id="speed"
                                 type="number"
                                 size={8}
                                 defaultValue={5}
@@ -43,7 +43,7 @@ export function Sidebar({ game }: { game: Game }) {
                         <li className="flex justify-between items-center gap-[0.236rem]">
                             <Label htmlFor="frequency">Frequency (ms)</Label>
                             <Input
-                                name="frequency"
+                                id="frequency"
                                 type="number"
                                 size={8}
                                 defaultValue={1000}
@@ -55,7 +55,7 @@ export function Sidebar({ game }: { game: Game }) {
                         <li className="flex justify-between items-center gap-[0.236rem]">
                             <Label htmlFor="rounds">Rounds (1-10)</Label>
                             <Input
-                                name="rounds"
+                                id="rounds"
                                 type="number"
                                 size={8}
                                 defaultValue={3}
@@ -68,9 +68,9 @@ export function Sidebar({ game }: { game: Game }) {
                     <Button
                         className="bg-primary w-full mt-[0.236rem]"
                         onClick={() => {
-                            const speed = Number(getInputElementByName("speed").value);
-                            const frequency = Number(getInputElementByName("frequency").value);
-                            const rounds = Number(getInputElementByName("rounds").value);
+                            const speed = Number(getInputElementById("speed").value);
+                            const frequency = Number(getInputElementById("frequency").value);
+                            const rounds = Number(getInputElementById("rounds").value);
                             game.setSpeed(speed);
                             game.setFrequency(frequency);
                             game.setRounds(rounds);
