@@ -9,7 +9,7 @@ import { pb } from "@/lib/pocketbase";
 import { Scoreboard } from "./scoreboard";
 import { useContext } from "react";
 
-export function Sidebar({ game }: { game: Game }) {
+export function Sidebar({ game }: { game: Game | undefined }) {
     const { user, setUser } = useContext(AppContext);
     return (
         <div className="max-w-[16rem] h-full flex flex-col overflow-y-auto">
@@ -71,11 +71,11 @@ export function Sidebar({ game }: { game: Game }) {
                             const speed = Number(getInputElementById("speed").value);
                             const frequency = Number(getInputElementById("frequency").value);
                             const rounds = Number(getInputElementById("rounds").value);
-                            game.setSpeed(speed);
-                            game.setFrequency(frequency);
-                            game.setRounds(rounds);
-                            game.start();
-                            setTimeout(() => game.serve(), frequency);
+                            game?.setSpeed(speed);
+                            game?.setFrequency(frequency);
+                            game?.setRounds(rounds);
+                            game?.start();
+                            setTimeout(() => game?.serve(), frequency);
                         }}
                     >
                         Start
@@ -83,7 +83,7 @@ export function Sidebar({ game }: { game: Game }) {
                     <Button
                         className="w-full mt-[0.236rem] border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
                         variant="secondary"
-                        onClick={() => game.reset()}
+                        onClick={() => game?.reset()}
                     >
                         Reset
                     </Button>

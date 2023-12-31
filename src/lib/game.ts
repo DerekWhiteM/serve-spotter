@@ -5,20 +5,29 @@ export class Game {
     static MAX_SPEED = 10;
     static MIN_SPEED = 1;
 
+    #ballElement: HTMLElement | null;
+    #ballId: string;
+    #ballInitialLeft = "0px";
+    #ballInitialTop = "0px";
+    #end: number | null = null;
     #frequency = 1;
-    #rounds = 1;
+    #intervalId: NodeJS.Timeout | undefined;
+    #isRunning = false;
     #round = 1;
+    #rounds = 1;
+    #scoreboard;
     #serveDirection: string | undefined;
     #speed = 1;
     #start: number | null = null;
-    #end: number | null = null;
-    #ballId: string;
-    #scoreboard;
-    #isRunning = false;
 
     constructor(ballId: string, scoreboard: Scoreboard) {
         this.#ballId = ballId;
         this.#scoreboard = scoreboard;
+        this.#ballElement = document.getElementById(this.#ballId);
+        if (this.#ballElement) {
+            this.#ballInitialTop = this.#ballElement.style.top;
+            this.#ballInitialLeft = this.#ballElement.style.left;
+        }
         document.addEventListener("keydown", event => {
             if (event.key === "ArrowLeft") {
                 this.return("ad");
@@ -28,40 +37,13 @@ export class Game {
         });
     }
 
-    getFrequency() {
-        return this.#frequency;
-    }
-
     reset() {
         this.#round = 1;
         this.#start = null;
         this.#end = null;
         this.#isRunning = false;
+        this.resetBall();
         this.#scoreboard.reset();
-    }
-
-    return(direction: string | null) {
-        let ms;
-        if (!this.#isRunning || this.#end !== null) { // Game has been reset
-            return null;
-        } else if (direction === this.#serveDirection) { // Successful return
-            this.#end = Date.now();
-            ms = this.#end - (this.#start || 0);
-        } else { // Missed return
-            this.#end = Date.now();
-            ms = 5000;
-            return this.reset();
-        }
-        this.#scoreboard.addScore(ms);
-        if (this.#round > this.#rounds) { // Game completed
-            this.#isRunning = false;
-            const score = this.#scoreboard.postAverageScore();
-            if (pb.authStore.model) {
-                pb.collection("played_games").create({ score, user_id: pb.authStore.model.id });
-            }
-        }
-        setTimeout(() => this.serve(), this.getFrequency());
-        return ms;
     }
 
     setFrequency(frequency: number) {
@@ -77,53 +59,76 @@ export class Game {
     }
 
     serve() {
-        const frame = () => {
-            if (this.#end) {
-                clearInterval(String(id));
-                if (elem) {
-                    elem.style.top = initTop;
-                    elem.style.left = initLeft;
-                }
-            } else if (pos >= 210) { // Ball has reached end of path
-                clearInterval(String(id));
-                if (elem) {
-                    elem.style.top = initTop;
-                    elem.style.left = initLeft;
-                }
-                this.return(null);
-            } else {
-                pos += this.#speed;
-                top += 4 * this.#speed;
-                direction === "deuce" ? (left += this.#speed) : (left -= this.#speed);
-                if (elem) {
-                    elem.style.top = top + "px";
-                    elem.style.left = left + "px";
-                }
-            }
-        };
         if (!this.#isRunning || this.#round > this.#rounds) {
+            // Game is over, don't serve
             return;
         }
         const randomZeroOrOne = Math.round(Math.random());
         const direction = randomZeroOrOne === 0 ? "deuce" : "ad";
         this.#serveDirection = direction;
-        let id: NodeJS.Timeout | null = null;
-        const elem = document.getElementById(this.#ballId);
-        if (!elem) return;
-        const initTop = elem.style.top;
-        const initLeft = elem.style.left;
         let pos = 0;
         let top = 0;
         let left = 202;
-        if (id) clearInterval(id);
         this.#start = Date.now();
         this.#end = null;
-        id = setInterval(frame, 10);
+        if (this.#intervalId) clearInterval(this.#intervalId);
+        this.#intervalId = setInterval(() => {
+            if (pos >= 210) {
+                // Ball has reached end of path
+                this.return(null);
+            } else {
+                // Continue animation
+                pos += this.#speed;
+                top += 4 * this.#speed;
+                direction === "deuce" ? (left += this.#speed) : (left -= this.#speed);
+                if (this.#ballElement) {
+                    this.#ballElement.style.top = top + "px";
+                    this.#ballElement.style.left = left + "px";
+                }
+            }
+        }, 10);
         this.#round++;
     }
 
     start() {
         this.reset();
         this.#isRunning = true;
+    }
+
+    private resetBall() {
+        clearInterval(this.#intervalId);
+        if (this.#ballElement) {
+            this.#ballElement.style.top = this.#ballInitialTop;
+            this.#ballElement.style.left = this.#ballInitialLeft;
+        }
+    }
+
+    private return(direction: string | null) {
+        let ms;
+        if (!this.#isRunning || this.#end !== null) {
+            // Game has been reset
+            return null;
+        } else if (direction === this.#serveDirection) {
+            // Successful return
+            this.#end = Date.now();
+            ms = this.#end - (this.#start || 0);
+            this.resetBall();
+        } else {
+            // Missed return
+            this.#end = Date.now();
+            ms = 5000;
+            return this.reset();
+        }
+        this.#scoreboard.addScore(ms);
+        if (this.#round > this.#rounds) {
+            // Game completed
+            this.#isRunning = false;
+            const score = this.#scoreboard.postAverageScore();
+            if (pb.authStore.model) {
+                pb.collection("played_games").create({ score, user_id: pb.authStore.model.id });
+            }
+        }
+        setTimeout(() => this.serve(), this.#frequency);
+        return ms;
     }
 }

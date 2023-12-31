@@ -11,26 +11,6 @@ export class Scoreboard {
         this.#bestScoreId = bestScoreId;
     }
 
-    postAverageScore() {
-        if (this.#scores.length === 0) return 0;
-        const sum = this.#scores.reduce((total, num) => total + num, 0);
-        const avg = sum / this.#scores.length;
-        const elem = document.getElementById(this.#avgId);
-        if (!elem) return 0;
-        const score = Math.round(avg);
-        elem.innerHTML = "Score: " + score;
-        this.postNewBestScore(score);
-        return score;
-    }
-
-    private postNewBestScore(score: number) {
-        if (this.#bestScore !== null && this.#bestScore < score) return;
-        this.#bestScore = score;
-        const elem = document.getElementById(this.#bestScoreId);
-        if (!elem) return;
-        elem.innerHTML = "Best Score: " + score;
-    }
-
     addScore(score: number) {
         this.#scores.push(score);
         const table = document.getElementById(this.#tableId);
@@ -43,6 +23,18 @@ export class Scoreboard {
         cell2.innerHTML = String(score);
     }
 
+    postAverageScore() {
+        if (this.#scores.length === 0) return 0;
+        const sum = this.#scores.reduce((total, num) => total + num, 0);
+        const avg = sum / this.#scores.length;
+        const elem = document.getElementById(this.#avgId);
+        if (!elem) return 0;
+        const score = Math.round(avg);
+        elem.innerHTML = "Score: " + score;
+        this.postNewBestScore(score);
+        return score;
+    }
+
     reset() {
         this.#scores = [];
         const table = document.getElementById(this.#tableId);
@@ -51,5 +43,13 @@ export class Scoreboard {
         const tbody = table.getElementsByTagName("tbody")[0];
         avg.innerHTML = "";
         tbody.innerHTML = "";
+    }
+
+    private postNewBestScore(score: number) {
+        if (this.#bestScore !== null && this.#bestScore < score) return;
+        this.#bestScore = score;
+        const elem = document.getElementById(this.#bestScoreId);
+        if (!elem) return;
+        elem.innerHTML = "Best Score: " + score;
     }
 }

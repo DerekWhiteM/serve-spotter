@@ -5,12 +5,17 @@ import { Game } from "./lib/game";
 import { pb } from "./lib/pocketbase";
 import { Scoreboard } from "./lib/scoreboard";
 import { Sidebar } from "./components/ui/sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
-    const scoreboard = new Scoreboard("scoreboard", "avg", "bestScore");
-    const game = new Game("ball", scoreboard);
     const [user, setUser] = useState(pb.authStore.model);
+    const [game, setGame] = useState<Game | undefined>();
+
+    useEffect(() => {
+        const scoreboard = new Scoreboard("scoreboard", "avg", "bestScore");
+        setGame(new Game("ball", scoreboard));
+    }, []);
+
     return (
         <AppContext.Provider value={{ user, setUser }}>
             <Sidebar game={game} />
