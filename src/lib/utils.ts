@@ -8,3 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 export function getInputElementByName(name: string) {
     return document.getElementsByName(name)[0] as HTMLInputElement;
 }
+
+export function getScreenDimensions() {
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+    };
+}
