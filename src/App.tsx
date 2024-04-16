@@ -6,7 +6,7 @@ import { Sidebar } from "./components/ui/sidebar";
 
 function App() {
     const scoreboard = new Scoreboard("scoreboard", "avg", "bestScore");
-    const game = new Game("ball", scoreboard);
+    const game = new Game(scoreboard);
     return (
         <>
             <Sidebar game={game} />

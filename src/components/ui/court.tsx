@@ -1,10 +1,10 @@
 export function Court() {
     return (
         <div className="bg-primary w-full flex">
-            <div className="w-[425px] h-[850px] border relative m-auto border-solid border-[white]">
+            <div id="court" className="w-[45vh] h-[90vh] max-w-[425px] max-h-[850px] border relative m-auto border-solid border-[white]">
                 <div
                     id="ball"
-                    className="absolute h-5 w-5 bg-[#FFD700] m-auto rounded-[10px] left-[202px] -top-2.5"
+                    className="absolute h-[20px] w-[20px] bg-[#FFD700] m-auto rounded-[10px] left-[calc(50%-10px)]"
                 ></div>
                 <div className="flex flex-col h-full">
                     <div className="h-full w-full"></div>

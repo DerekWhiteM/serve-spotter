@@ -11,12 +11,12 @@ export class Game {
     #speed = 1;
     #start: number | null = null;
     #end: number | null = null;
-    #ballId: string;
+    #ballId = "ball";
+    #courtId = "court";
     #scoreboard;
     #isRunning = false;
 
-    constructor(ballId: string, scoreboard: Scoreboard) {
-        this.#ballId = ballId;
+    constructor(scoreboard: Scoreboard) {
         this.#scoreboard = scoreboard;
         document.addEventListener("keydown", event => {
             if (event.key === "ArrowLeft") {
@@ -71,19 +71,24 @@ export class Game {
         this.#rounds = rounds;
     }
 
+    getCourtHeight() {
+        const elem = document.getElementById(this.#courtId) as HTMLElement;
+        return elem.clientHeight;
+    }
+
     serve() {
         const frame = () => {
             if (this.#end) {
                 clearInterval(String(id));
                 if (elem) {
-                    elem.style.top = initTop;
-                    elem.style.left = initLeft;
+                    elem.style.marginTop = initTop;
+                    elem.style.marginLeft = initLeft;
                 }
-            } else if (pos >= 210) {
+            } else if (pos >= ((this.getCourtHeight() / 4) - 5)) {
                 clearInterval(String(id));
                 if (elem) {
-                    elem.style.top = initTop;
-                    elem.style.left = initLeft;
+                    elem.style.marginTop = initTop;
+                    elem.style.marginLeft = initLeft;
                 }
                 this.return(null);
             } else {
@@ -91,8 +96,8 @@ export class Game {
                 top += 4 * this.#speed;
                 direction === "deuce" ? (left += this.#speed) : (left -= this.#speed);
                 if (elem) {
-                    elem.style.top = top + "px";
-                    elem.style.left = left + "px";
+                    elem.style.marginTop = top + "px";
+                    elem.style.marginLeft = left + "px";
                 }
             }
         };
@@ -105,11 +110,11 @@ export class Game {
         let id: NodeJS.Timeout | null = null;
         const elem = document.getElementById(this.#ballId);
         if (!elem) return;
-        const initTop = elem.style.top;
-        const initLeft = elem.style.left;
+        const initTop = elem.style.marginTop;
+        const initLeft = elem.style.marginLeft;
         let pos = 0;
         let top = 0;
-        let left = 202;
+        let left = 0;
         if (id) clearInterval(id);
         this.#start = Date.now();
         this.#end = null;
