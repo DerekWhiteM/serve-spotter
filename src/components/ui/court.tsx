@@ -1,8 +1,8 @@
-import { useScreenDimensions } from "@/hooks/use-screen-dimensions";
+import { Game } from "@/lib/game";
 import { useEffect, useState } from "react";
+import { useScreenDimensions } from "@/hooks/use-screen-dimensions";
 
-export function Court() {
-
+export function Court({ game }: { game: Game }) {
     const screenDimensions = useScreenDimensions();
     const [courtDimensions, setCourtDimensions] = useState({
         height: "",
@@ -24,7 +24,7 @@ export function Court() {
     }, [screenDimensions]);
 
     return (
-        <div className="w-full flex ml-[2.6rem]">
+        <div className="w-full flex">
             <div
                 id="court"
                 className={`${courtDimensions.width} ${courtDimensions.height} max-w-[425px] max-h-[850px] border relative m-auto border-solid border-[white]`}
@@ -40,12 +40,12 @@ export function Court() {
                         <div className="h-full w-full"></div>
                     </div>
                     <div className="flex h-full w-full border-y-[white] border-t border-solid border-b">
-                        <div className="h-full w-full border-r-[white] border-r border-solid"></div>
-                        <div className="h-full w-full"></div>
+                        <div className="h-full w-full border-r-[white] border-r border-solid" onClick={() => game.return("ad")}></div>
+                        <div className="h-full w-full" onClick={() => game.return("deuce")}></div>
                     </div>
                     <div className="flex h-full w-full">
-                        <div className="h-full w-full"></div>
-                        <div className="h-full w-full"></div>
+                        <div className="h-full w-full" onClick={() => game.return("ad")}></div>
+                        <div className="h-full w-full" onClick={() => game.return("deuce")}></div>
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ function App() {
     return (
         <>
             <Sidebar game={game} />
-            <Court />
+            <Court game={game} />
         </>
     );
 }
