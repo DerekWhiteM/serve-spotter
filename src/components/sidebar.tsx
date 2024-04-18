@@ -1,6 +1,5 @@
 import { Button } from "./button";
-import { ChevronsLeft } from "lucide-react";
-import { ChevronsRight } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Play } from "lucide-react";
 import { Game } from "@/game";
 import { getInputElementByName } from "@/utils";
 import { Input } from "./input";
@@ -12,14 +11,34 @@ export function Sidebar({ game }: { game: Game }) {
     function toggleOpen() {
         open ? setOpen(false) : setOpen(true);
     }
+    function startGame() {
+        const speed = Number(getInputElementByName("speed").value);
+        const frequency = Number(
+            getInputElementByName("frequency").value
+        );
+        const rounds = Number(getInputElementByName("rounds").value);
+        game.setSpeed(speed);
+        game.setFrequency(frequency);
+        game.setRounds(rounds);
+        game.start();
+        setTimeout(() => game.serve(), frequency);
+    }
     return (
         <>
             {!open && (
-                <div
-                    className="flex content-center bg-background text-gray-700 p-2 border-b rounded cursor-pointer hover:bg-muted absolute"
-                    onClick={toggleOpen}
-                >
-                    <ChevronsRight />
+                <div className="absolute">
+                    <div
+                        className="flex content-center bg-background text-gray-700 p-2 rounded cursor-pointer hover:bg-muted"
+                        onClick={toggleOpen}
+                    >
+                        <ChevronsRight />
+                    </div>
+                    <div
+                        className="flex content-center bg-play text-primary-foreground p-2 rounded cursor-pointer hover:bg-play/90"
+                        onClick={startGame}
+                    >
+                        <Play />
+                    </div>
                 </div>
             )}
             <div
@@ -95,16 +114,7 @@ export function Sidebar({ game }: { game: Game }) {
                                 className="bg-primary w-full mt-[0.236rem]"
                                 onClick={() => {
                                     toggleOpen();
-                                    const speed = Number(getInputElementByName("speed").value);
-                                    const frequency = Number(
-                                        getInputElementByName("frequency").value
-                                    );
-                                    const rounds = Number(getInputElementByName("rounds").value);
-                                    game.setSpeed(speed);
-                                    game.setFrequency(frequency);
-                                    game.setRounds(rounds);
-                                    game.start();
-                                    setTimeout(() => game.serve(), frequency);
+                                    startGame();
                                 }}
                             >
                                 Start

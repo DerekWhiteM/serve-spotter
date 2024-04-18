@@ -50,6 +50,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        play: {
+          DEFAULT: "hsl(var(--play))"
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
