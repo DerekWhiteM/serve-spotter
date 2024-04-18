@@ -1,22 +1,22 @@
 import { Button } from "./button";
 import { ChevronsLeft } from "lucide-react";
 import { ChevronsRight } from "lucide-react";
-import { Game } from "@/lib/game";
-import { getInputElementByName } from "@/lib/utils";
+import { Game } from "@/game";
+import { getInputElementByName } from "@/utils";
 import { Input } from "./input";
 import { Label } from "./label";
-import { Scoreboard } from "./scoreboard";
 import { useState } from "react";
 
 export function Sidebar({ game }: { game: Game }) {
     const [open, setOpen] = useState(false);
-    const toggleOpen = () => (open ? setOpen(false) : setOpen(true));
-
+    function toggleOpen() {
+        open ? setOpen(false) : setOpen(true);
+    }
     return (
         <>
             {!open && (
                 <div
-                    className={`flex content-center bg-gray-100 text-gray-700 p-2 border-b rounded cursor-pointer hover:bg-gray-200 absolute`}
+                    className="flex content-center bg-background text-gray-700 p-2 border-b rounded cursor-pointer hover:bg-muted absolute"
                     onClick={toggleOpen}
                 >
                     <ChevronsRight />
@@ -24,42 +24,35 @@ export function Sidebar({ game }: { game: Game }) {
             )}
             <div
                 id="sidebar"
-                className={`max-w-[16rem] bg-primary-foreground absolute h-full z-10 overflow-y-scroll`}
+                className="max-w-[16rem] bg-background absolute h-full z-10 overflow-y-scroll"
             >
                 {open && (
                     <div
-                        className={`flex content-center bg-gray-100 text-gray-700 p-2 border-b rounded cursor-pointer hover:bg-gray-200`}
+                        className="flex content-center bg-background text-gray-700 p-2 rounded cursor-pointer hover:bg-muted"
                         onClick={toggleOpen}
                     >
                         <ChevronsLeft className="m-auto" />
                     </div>
                 )}
-                <h1
-                    className={`text-[1.8rem] text-center relative ${
+                <div
+                    className={`flex flex-col overflow-y-scroll ${
                         open ? "w-auto" : "w-0 overflow-hidden text-nowrap"
                     }`}
                 >
-                    Serve Spotter
-                </h1>
-                <div
-                    className={`flex flex-col ${
-                        open ? "w-auto" : "w-0 overflow-hidden text-nowrap"
-                    } overflow-y-scroll`}
-                >
                     <div>
-                        <h2 className="text-center bg-secondary text-secondary-foreground py-[0.236rem]">
+                        <h2 className="bg-muted font-semibold text-secondary-foreground px-4 py-[0.236rem] border-y">
                             How to play
                         </h2>
-                        <div className="px-2 py-4">
+                        <div className="px-4 py-4">
                             Click the left or right side of the court to return each serve as
-                            quickly as you can.
+                            quickly as you can. Arrow keys work too.
                         </div>
                     </div>
                     <div>
-                        <h2 className="text-center bg-secondary text-secondary-foreground py-[0.236rem]">
+                        <h2 className="bg-secondary text-secondary-foreground font-semibold px-4 py-[0.236rem] border-y">
                             Configuration
                         </h2>
-                        <div className="px-2 py-6">
+                        <div className="p-4">
                             <ul className="flex flex-col gap-[0.382rem] mb-4">
                                 <li className="flex justify-between items-center gap-[0.236rem]">
                                     <Label htmlFor="speed">Speed (1-10)</Label>
@@ -116,16 +109,26 @@ export function Sidebar({ game }: { game: Game }) {
                             >
                                 Start
                             </Button>
-                            <Button
-                                className="w-full mt-[0.236rem] border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
-                                variant="secondary"
-                                onClick={() => game.reset()}
-                            >
-                                Reset
-                            </Button>
                         </div>
                     </div>
-                    <Scoreboard />
+                    <div>
+                        <h2 className="bg-secondary font-semibold text-secondary-foreground px-4 py-[0.236rem] border-y">
+                            Scoreboard
+                        </h2>
+                        <div className="p-4">
+                            <table id="scoreboard" className="w-full text-left">
+                                <thead>
+                                    <tr>
+                                        <th className="font-semibold">Round</th>
+                                        <th className="font-semibold">Time (ms)</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div id="avg" className="w-full font-semibold mt-4"></div>
+                            <div id="bestScore" className="w-full font-semibold mt-4"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -1,4 +1,4 @@
-import { Game } from "@/lib/game";
+import { Game } from "@/game";
 import { useEffect, useState } from "react";
 import { useScreenDimensions } from "@/hooks/use-screen-dimensions";
 

@@ -1,12 +1,10 @@
 import "./index.css";
-import { Court } from "./components/ui/court";
-import { Game } from "./lib/game";
-import { Scoreboard } from "./lib/scoreboard";
-import { Sidebar } from "./components/ui/sidebar";
+import { Court } from "./components/court";
+import { Game } from "./game";
+import { Sidebar } from "./components/sidebar";
 
 function App() {
-    const scoreboard = new Scoreboard("scoreboard", "avg", "bestScore");
-    const game = new Game(scoreboard);
+    const game = new Game();
     return (
         <>
             <Sidebar game={game} />
